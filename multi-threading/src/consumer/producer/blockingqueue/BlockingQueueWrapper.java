@@ -4,20 +4,39 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockingQueueWrapper {
 
-	private final BlockingQueue<String> queue = new ArrayBlockingQueue<String>(10);
+	private BlockingQueue<String> queue;
 	private int COUNTER = 1;
+    private boolean isSynchronousQueue=false;
+    private int capacity;
+
+	public BlockingQueueWrapper(boolean isSynchronousQueue,int capacity) {
+		super();
+		this.isSynchronousQueue = isSynchronousQueue;
+		this.capacity=capacity;
+		if(isSynchronousQueue) {
+			queue=new SynchronousQueue<>();
+		}
+		else {
+			queue = new ArrayBlockingQueue<String>(capacity);
+		}
+	}
 
 	public void add() {
 		String item = null;
 		item = "Item " + COUNTER;
 		COUNTER++;
-		queue.offer(item);
+		try {
+			queue.put(item);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		System.out.println("Added item " + item);
 
 	}
