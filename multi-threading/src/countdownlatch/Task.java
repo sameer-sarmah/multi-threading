@@ -5,7 +5,7 @@ import java.util.concurrent.CountDownLatch;
 public class Task implements Runnable {
 
 	private String name;
-	private CountDownLatch latch;
+	protected CountDownLatch latch;
 		
 	public Task(String name,CountDownLatch latch) {
 		super();

@@ -15,7 +15,7 @@ public class ExecutorDriver {
 	IntStream.rangeClosed(0, 5).forEach((int num)->{
 		executor.submit(new Task("Task "+num,latch));
 	});
-	
+	executor.submit(new TriggerByLatch("Await for latch",latch));
 	executor.shutdown();
 	
 	System.out.println("all tasks are submitted");
