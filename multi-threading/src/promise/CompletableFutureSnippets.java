@@ -88,12 +88,35 @@ public class CompletableFutureSnippets {
 	
 	private static void handleExceptions() {
 		ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+		/*
+		 * handle() method is always executed regardless of exception occurs or not, 
+		 * whereas exceptionally() stage is only executed when there's an exception.
+		 * */
 		CompletableFuture.supplyAsync(new FullNameProviderWithException(), executorService)
 			.handle((name,exception)->{
+				if(exception != null) {
+					System.out.println("exception encountered in handle operation,in thread: "+Thread.currentThread().getName());
+					System.err.println(exception.getMessage());	
+				}
+
 				String defaultName = "default";
 				return name != null ? name :defaultName;
 			})
-			.thenAccept(System.out::println);
+			.thenAccept((name)->{
+				System.out.println(name+" consumed in thread: "+Thread.currentThread().getName());
+			});
+		
+		//if there's no exception then exceptionally() stage is skipped
+		CompletableFuture.supplyAsync(new FullNameProviderWithException(), executorService)
+		.exceptionally((exception) -> {
+			System.out.println("exception encountered in exceptionally operation,in thread: "+Thread.currentThread().getName());
+			System.err.println(exception.getMessage());
+			String defaultName = "default";
+			return defaultName;
+		})
+		.thenAccept((name)->{
+			System.out.println(name+" consumed in thread: "+Thread.currentThread().getName());
+		});
 	}
 
 	private static class FullNameProvider implements Runnable{
