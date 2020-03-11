@@ -16,12 +16,7 @@ public class MultipleFutureDriver {
 		List<Integer> numbers = IntStream.rangeClosed(1, 2000).boxed().collect(Collectors.toList());
 		List<Future<Integer>> futureList=new ArrayList<>();
 		ExecutorService executor=Executors.newFixedThreadPool(4);
-		Predicate<Integer> predicate = (num) -> {
-			if (num >= 500)
-				return true;
-			else
-				return false;
-		};
+		Predicate<Integer> predicate = (num) -> num >= 500;
 		int key=1500;
 		List<List<Integer>> subLists=sublist(numbers,predicate);
 		subLists.stream().forEach((List<Integer> subList)->{
@@ -48,13 +43,7 @@ public class MultipleFutureDriver {
 		if (shouldPartition) {
 			int middleElement=numbers.get(numbers.size()/2);
 			Collection<List<Integer>> partitionedCollection = numbers.stream()
-			.collect(Collectors.partitioningBy((element)->{
-				if(element>=middleElement)
-					return true;
-				else
-					return false;
-					
-			})).values();
+			.collect(Collectors.partitioningBy((element)->element>=middleElement)).values();
 			partitionedList = new ArrayList<>(partitionedCollection);
 			List<Integer> leftSubList=partitionedList.get(0);
 			List<List<Integer>> partitionedLeftSubList=sublist(leftSubList,predicate);

@@ -21,6 +21,10 @@ public class ConditionLockWrapper {
 		{
 			System.out.println("Lock acquired in producer");
 			while(this.getSize()==MAX_SIZE) {
+				/*
+				 *  During the wait time, the thread temporarily gives up its exclusive access 
+				 *  and must reacquire it after the condition has been met.
+				 * */
 				readyToAddCond.await();
 			}
 			 item = "Item "+COUNTER;
@@ -42,6 +46,10 @@ public class ConditionLockWrapper {
 		try{
 			System.out.println("Lock acquired in consumer");
 			while(this.getSize()==0) {
+				/*
+				 *  During the wait time, the thread temporarily gives up its exclusive access 
+				 *  and must reacquire it after the condition has been met.
+				 * */
 				readyForReadCond.await();
 			}
 			value=queue.poll();
