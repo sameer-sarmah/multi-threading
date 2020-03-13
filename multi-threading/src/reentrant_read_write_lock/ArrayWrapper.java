@@ -11,6 +11,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ArrayWrapper<T> implements Iterable<T> {
 	private List<T> list = new ArrayList<>();
+	/*ReadWriteLock are more suited than only ReentrantLock for cases where read and like write(update,delete) are
+	 *handled differently e.g example in this case get is a read operation where delete and add are write operations
+	 *
+	 *In ReentrantLock only a single thread can have a lock at a particular time
+	 *In ReadWriteLock multiple threads can share a read lock but a only a single thread can own a write lock
+	 *as multiple threads can share a read lock this is more performant
+	 * */
 	private ReadWriteLock rwLock = new ReentrantReadWriteLock();
 	private Lock readLock = rwLock.readLock();
 	private Lock writeLock = rwLock.writeLock();
