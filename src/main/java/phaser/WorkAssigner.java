@@ -9,13 +9,13 @@ import api.IPlan;
 import domain.Person;
 import impl.MoviePlan;
 import impl.WatchMovie;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
 public class WorkAssigner {
 	private Queue<Person> people;
+	
+	public WorkAssigner(Queue<Person> people) {
+		this.people = people;
+	}
 
 	@SuppressWarnings("unchecked")
 	public void assignWork() {

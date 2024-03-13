@@ -8,12 +8,8 @@ import java.util.concurrent.TimeUnit;
 import api.IAction;
 import api.IPlan;
 import domain.Person;
-import lombok.Getter;
-import lombok.Setter;
 import util.Util;
 
-@Getter
-@Setter
 public class DailyRoutine<T extends IAction> implements Runnable {
 	private Person person;
 	private Phaser peopleToJoinAPlan;
@@ -40,6 +36,26 @@ public class DailyRoutine<T extends IAction> implements Runnable {
 			peopleToJoinAPlan.arriveAndAwaitAdvance();
 			System.out.println(person.getName() + " going to have joined");
 		}
+	}
+	
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+
+	public void setPeopleToJoinAPlan(Phaser peopleToJoinAPlan) {
+		this.peopleToJoinAPlan = peopleToJoinAPlan;
+	}
+
+	public void setPlan(IPlan<T> plan) {
+		this.plan = plan;
+	}
+
+	public void setAction(T action) {
+		this.action = action;
+	}
+
+	public void setShouldWait(boolean shouldWait) {
+		this.shouldWait = shouldWait;
 	}
 	
 	public static class Builder<T extends IAction>{
@@ -78,6 +94,8 @@ public class DailyRoutine<T extends IAction> implements Runnable {
 			return this;
 		} 
 		
+
+
 		public DailyRoutine build() throws IllegalStateException {
 			Objects.requireNonNull(peopleToJoinAPlan, "Phaser can't be null");
 			Objects.requireNonNull(person, "Person can't be null");
@@ -92,7 +110,6 @@ public class DailyRoutine<T extends IAction> implements Runnable {
 			return routine;
 		}
 	}
-	
-	
+
 
 }
