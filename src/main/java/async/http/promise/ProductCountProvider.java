@@ -1,34 +1,25 @@
 package async.http.promise;
 
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.concurrent.CompletableFuture;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.hc.client5.http.classic.HttpClient;
 
-public class ProductCountProvider implements Runnable {
+import api.AbstractResponseProvider;
 
-	private final String countURL;
+public class ProductCountProvider extends AbstractResponseProvider implements Runnable {
+
 	private final CompletableFuture<Integer> promise;
-	private final HttpClient httpClient;
 
 	public ProductCountProvider(String countURL,CompletableFuture<Integer> promise,HttpClient httpClient) {
-		this.countURL = countURL;
+		super(countURL,httpClient);
 		this.promise = promise;
-		this.httpClient = httpClient;
 	}
 
 	@Override
 	public void run() {		
 		try {
 			System.out.println("ProductCountProvider processing done by thread "+Thread.currentThread().getName());
-			HttpGet request = new HttpGet(countURL);
-			HttpResponse response = httpClient.execute(request);
-			InputStream inputStream = response.getEntity().getContent();
-			String productsCountStr = IOUtils.toString(inputStream, Charset.defaultCharset());
+			String productsCountStr = getResponse();
 			Integer count = Integer.parseInt(productsCountStr);
 			promise.complete(count);
 		} catch (Exception e) {

@@ -1,34 +1,26 @@
 package async.http.countdownlatch;
 
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.hc.client5.http.classic.HttpClient;
 
-public class ProductCountProvider implements Callable<Integer> {
-	private final String countURL;
+import api.AbstractResponseProvider;
+
+public class ProductCountProvider extends AbstractResponseProvider implements Callable<Integer> {
+
 	private final CountDownLatch latch;
-	private final HttpClient httpClient;
-
+	
 	public ProductCountProvider(String countURL,CountDownLatch latch,HttpClient httpClient) {
-		this.countURL = countURL;
+		super(countURL,httpClient);
 		this.latch = latch;
-		this.httpClient = httpClient;
 	}
 
 	@Override
 	public Integer call() throws Exception {		
 		try {
 			System.out.println("ProductCountProvider processing done by thread "+Thread.currentThread().getName());
-			HttpGet request = new HttpGet(countURL);
-			HttpResponse response = httpClient.execute(request);
-			InputStream inputStream = response.getEntity().getContent();
-			String productsCountStr = IOUtils.toString(inputStream, Charset.defaultCharset());
+			String productsCountStr = getResponse();
 			Integer count = Integer.parseInt(productsCountStr);
 			return count;
 		} catch (Exception e) {
