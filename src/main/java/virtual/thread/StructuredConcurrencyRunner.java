@@ -1,17 +1,18 @@
 package virtual.thread;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.StructuredTaskScope;
 import java.util.concurrent.StructuredTaskScope.Subtask;
 
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StructuredConcurrencyRunner {
 	private static final String serviceBaseURL = "https://services.odata.org/Northwind/Northwind.svc/Products";
+	
+	private static Logger logger = LoggerFactory.getLogger(StructuredConcurrencyRunner.class);
 	
 	 public static void main(String[] args) {
 		 HttpClient httpClient =  HttpClientBuilder.create().build();
@@ -26,15 +27,11 @@ public class StructuredConcurrencyRunner {
 				scope.join().throwIfFailed();
 				Integer count = retrieveProductCount.get();
 				String products = retrieveProducts.get();
-				System.out.println(count);
-				System.out.println(products);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				logger.info( String.valueOf(count));
+				logger.info( products);
+			} catch (InterruptedException | ExecutionException e) {
+				logger.error(e.getMessage());
+			} 
 		 }
 	 }
 }

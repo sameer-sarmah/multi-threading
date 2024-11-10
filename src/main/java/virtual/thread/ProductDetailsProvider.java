@@ -3,10 +3,14 @@ package virtual.thread;
 import java.util.concurrent.Callable;
 
 import org.apache.hc.client5.http.classic.HttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import api.AbstractResponseProvider;
 
 public class ProductDetailsProvider extends AbstractResponseProvider implements Callable<String> {
+	
+	private static Logger logger = LoggerFactory.getLogger(ProductDetailsProvider.class);
 	
 	public ProductDetailsProvider(String productURL,HttpClient httpClient) {
 		super(productURL, httpClient);
@@ -16,9 +20,9 @@ public class ProductDetailsProvider extends AbstractResponseProvider implements 
 	public String call()  {
 		String productsJSON = "{}";
 		try {
-			System.out.println("ProductDetailsProvider processing starting in thread "+Thread.currentThread());
+			logger.info("ProductDetailsProvider processing starting in thread "+Thread.currentThread());
 			productsJSON =  getResponse();
-			System.out.println("ProductDetailsProvider processing complted in thread "+Thread.currentThread());
+			logger.info("ProductDetailsProvider processing complted in thread "+Thread.currentThread());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

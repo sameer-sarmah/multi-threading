@@ -7,9 +7,13 @@ import java.util.concurrent.Future;
 
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class VirtualThreadRunner {
+	
+	private static Logger logger = LoggerFactory.getLogger(VirtualThreadRunner.class);
 	
 	private static final String serviceBaseURL = "https://services.odata.org/Northwind/Northwind.svc/Products";
 	
@@ -25,10 +29,10 @@ public class VirtualThreadRunner {
 		 try {
 			Integer count = countFuture.get();
 			String products = productFuture.get();
-			System.out.println(count);
-			System.out.println(products);
+			logger.info( String.valueOf(count));
+			logger.info( products);
 		} catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}		 
 	 }
 }
