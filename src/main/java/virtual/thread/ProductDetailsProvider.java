@@ -16,8 +16,9 @@ public class ProductDetailsProvider extends AbstractResponseProvider implements 
 	public String call()  {
 		String productsJSON = "{}";
 		try {
-			System.out.println("ProductDetailsProvider processing done by thread "+Thread.currentThread().getName());
+			System.out.println("ProductDetailsProvider processing starting in thread "+Thread.currentThread());
 			productsJSON =  getResponse();
+			System.out.println("ProductDetailsProvider processing complted in thread "+Thread.currentThread());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

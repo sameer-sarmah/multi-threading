@@ -15,9 +15,10 @@ public class ProductCountProvider extends AbstractResponseProvider implements Ca
 	@Override
 	public Integer call() {		
 		try {
-			System.out.println("ProductCountProvider processing done by thread "+Thread.currentThread().getName());
+			System.out.println("ProductCountProvider processing starting in thread "+Thread.currentThread());
 			String productsCountStr = getResponse();
 			Integer count = Integer.parseInt(productsCountStr);
+			System.out.println("ProductCountProvider processing completed in thread="+Thread.currentThread()+",count="+count);
 			return count;
 		} catch (Exception e) {
 			e.printStackTrace();
