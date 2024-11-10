@@ -22,9 +22,9 @@ public class ProductDetailsProvider extends AbstractResponseProvider implements 
 		try {
 			logger.info("ProductDetailsProvider processing starting in thread "+Thread.currentThread());
 			productsJSON =  getResponse();
-			logger.info("ProductDetailsProvider processing complted in thread "+Thread.currentThread());
+			logger.info("ProductDetailsProvider processing completed in thread "+Thread.currentThread());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return productsJSON;
 	}
